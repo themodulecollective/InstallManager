@@ -112,7 +112,7 @@ function Update-IMInstall
                 }
                 'chocolatey'
                 {
-                    $installedModuleInfo = Get-InstalledByChoco -Name $Name
+                    $installedModuleInfo = Get-IMInstalledByChoco -Name $Name
                     $options = ''
                     if (-not [string]::IsNullOrEmpty($AdditionalParameter))
                     {
