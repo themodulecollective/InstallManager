@@ -1,4 +1,4 @@
-﻿Function Get-IMUninstallEntry
+﻿Function Get-IMSystemUninstallEntry
 {
 
     [cmdletbinding(DefaultParameterSetName = 'SpecifiedProperties')]

@@ -43,7 +43,7 @@ function Update-IMInstall
             {
                 'PowerShellGet'
                 {
-                    $installedModuleInfo = Get-IMInstalledModule -Name $Name
+                    $installedModuleInfo = Get-IMPowerShellGetInstall -Name $Name
                     $installModuleParams = @{
                         Name          = $Name
                         Scope         = 'AllUsers'
@@ -76,7 +76,7 @@ function Update-IMInstall
                     }
                     if (-not [string]::IsNullOrEmpty($RequiredVersion))
                     {
-                        $installedModuleInfo = Get-IMInstalledModule -Name $Name
+                        $installedModuleInfo = Get-IMPowerShellGetInstall -Name $Name
                         foreach ($rv in $RequiredVersion.split(';'))
                         {
                             if ($rv -notin $installedModuleInfo.AllInstalledVersions)
@@ -88,7 +88,7 @@ function Update-IMInstall
                     }
                     if ($true -eq $AutoRemove)
                     {
-                        $installedModuleInfo = Get-IMInstalledModule -Name $Name
+                        $installedModuleInfo = Get-IMPowerShellGetInstall -Name $Name
                         [System.Collections.ArrayList]$keepVersions = @()
                         $RequiredVersion.split(';').ForEach( { $keepVersions.add($_) }) | Out-Null
                         if ($true -eq $autoupgrade)
@@ -112,7 +112,7 @@ function Update-IMInstall
                 }
                 'chocolatey'
                 {
-                    $installedModuleInfo = Get-IMInstalledByChoco -Name $Name
+                    $installedModuleInfo = Get-IMChocoInstall -Name $Name
                     $options = ''
                     if (-not [string]::IsNullOrEmpty($AdditionalParameter))
                     {

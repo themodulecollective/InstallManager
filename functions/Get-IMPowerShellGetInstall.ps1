@@ -1,4 +1,4 @@
-﻿Function Get-IMInstalledModule
+﻿Function Get-IMPowerShellGetInstall
 {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
