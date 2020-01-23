@@ -1,5 +1,5 @@
 function Import-IMModuleConfig
 {
     $script:IMConfiguration = Import-Configuration
-    $script:ManagedInstalls = $script:IMConfiguration.Definitions
+    [System.Collections.Generic.List[object]]$script:ManagedInstalls = $script:IMConfiguration.Definitions
 }

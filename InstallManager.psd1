@@ -12,7 +12,7 @@
     RootModule        = '.\InstallManager.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.0.0.1'
+    ModuleVersion     = '0.0.0.2'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -27,7 +27,7 @@
     CompanyName       = 'themodulecollective'
 
     # Copyright statement for this module
-    Copyright         = '2019'
+    Copyright         = '2020'
 
     # Description of the functionality provided by this module
     # Description = ''
@@ -77,6 +77,9 @@
         'Get-IMSystemUninstallEntry'
         'Get-IMDefinition'
         'Update-IMInstall'
+        'New-IMDefinition'
+        'Remove-IMDefinition'
+        'Set-IMDefinition'
     )
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
