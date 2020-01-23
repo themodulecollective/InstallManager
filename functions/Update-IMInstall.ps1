@@ -7,7 +7,7 @@ function Update-IMInstall
         [string]$Name
         ,
         [Parameter(ValueFromPipelineByPropertyName)]
-        [string]$RequiredVersion
+        [string[]]$RequiredVersion
         ,
         [Parameter(ValueFromPipelineByPropertyName)]
         [bool]$AutoUpgrade
@@ -19,11 +19,15 @@ function Update-IMInstall
         [String[]]$ExemptMachine
         ,
         [Parameter(ValueFromPipelineByPropertyName)]
+        [ValidateNotNullOrEmpty()]
         [Alias('Parameter')]
-        $AdditionalParameter
+        [hashtable]$AdditionalParameter
         ,
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [InstallManager]$InstallManager
+        ,
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [String]$Scope
         #,
         #[Parameter()]
         #[string]$Repository
@@ -43,21 +47,19 @@ function Update-IMInstall
             {
                 'PowerShellGet'
                 {
-                    $installedModuleInfo = Get-IMInstalledModule -Name $Name
+                    $installedModuleInfo = Get-IMPowerShellGetInstall -Name $Name
                     $installModuleParams = @{
                         Name          = $Name
-                        Scope         = 'AllUsers'
+                        Scope         = switch ([string]::IsNullOrWhiteSpace($Scope)) {$true {'CurrentUser'} $false {$Scope}}
                         Force         = $true
                         AcceptLicense = $true
                         AllowClobber  = $true
                     }
-                    if (-not [string]::IsNullOrEmpty($AdditionalParameter))
+                    if ($PSBoundParameters.ContainsKey('AdditionalParameter'))
                     {
-                        foreach ($ap in $AdditionalParameter.split(';'))
+                        foreach ($key in $AdditionalParameter.keys)
                         {
-                            $parameter, $value = $ap.split(' ')
-                            switch ($value) { 'TRUE' { $value = $true } 'FALSE' { $value = $false } }
-                            $installModuleParams.$parameter = $value
+                            $installModuleParams.$key = $AdditionalParameter.$key
                         }
                     }
                     switch ($true -eq $AutoUpgrade)
@@ -76,8 +78,8 @@ function Update-IMInstall
                     }
                     if (-not [string]::IsNullOrEmpty($RequiredVersion))
                     {
-                        $installedModuleInfo = Get-IMInstalledModule -Name $Name
-                        foreach ($rv in $RequiredVersion.split(';'))
+                        $installedModuleInfo = Get-IMPowerShellGetInstall -Name $Name
+                        foreach ($rv in $RequiredVersion)
                         {
                             if ($rv -notin $installedModuleInfo.AllInstalledVersions)
                             {
@@ -88,7 +90,7 @@ function Update-IMInstall
                     }
                     if ($true -eq $AutoRemove)
                     {
-                        $installedModuleInfo = Get-IMInstalledModule -Name $Name
+                        $installedModuleInfo = Get-IMPowerShellGetInstall -Name $Name
                         [System.Collections.ArrayList]$keepVersions = @()
                         $RequiredVersion.split(';').ForEach( { $keepVersions.add($_) }) | Out-Null
                         if ($true -eq $autoupgrade)
@@ -112,17 +114,16 @@ function Update-IMInstall
                 }
                 'chocolatey'
                 {
-                    $installedModuleInfo = Get-IMInstalledByChoco -Name $Name
+                    $installedModuleInfo = Get-IMChocoInstall -Name $Name
                     $options = ''
-                    if (-not [string]::IsNullOrEmpty($AdditionalParameter))
+                    if ($PSBoundParameters.ContainsKey('AdditionalParameter'))
                     {
-                        foreach ($ap in $AdditionalParameter.split(';'))
+                        foreach ($key in $AdditionalParameter.keys)
                         {
-                            $parameter, $value = $ap.split(' ')
-                            $options += "--$parameter"
-                            if ($null -ne $value)
+                            $options += "--$key"
+                            if (-not [string]::IsNullOrWhiteSpace($AdditionalParameter.$key))
                             {
-                                $options += "=`"'$value'`" "
+                                $options += "=`"'$AdditionalParameter.$key'`" "
                             }
                             else
                             {
@@ -136,14 +137,22 @@ function Update-IMInstall
                         {
                             if ($false -eq $installedModuleInfo.IsLatestVersion -or $null -eq $installedModuleInfo.IsLatestVersion)
                             {
-                                Invoke-Command -ScriptBlock $([scriptblock]::Create("choco upgrade $Name --Yes --LimitOutput $options"))
+                                Write-Information -MessageData "Running Command: 'choco upgrade $Name --Yes --LimitOutput $options'"
+                                if ($PSCmdlet.ShouldProcess("choco upgrade $Name --Yes --LimitOutput $options"))
+                                {
+                                    Invoke-Command -ScriptBlock $([scriptblock]::Create("choco upgrade $Name --Yes --LimitOutput $options"))
+                                }
                             }
                         }
                         $false
                         {
                             if ($null -eq $installedModuleInfo)
                             {
-                                Invoke-Command -ScriptBlock $([scriptblock]::Create("choco upgrade $Name --Yes --LimitOutput $options"))
+                                Write-Information -MessageData "Running Command: 'choco upgrade $Name --Yes --LimitOutput $options'"
+                                if ($PSCmdlet.ShouldProcess("choco upgrade $Name --Yes --LimitOutput $options"))
+                                {
+                                    Invoke-Command -ScriptBlock $([scriptblock]::Create("choco upgrade $Name --Yes --LimitOutput $options"))
+                                }
                             }
                             #notification/logging that a new version is available
                         }

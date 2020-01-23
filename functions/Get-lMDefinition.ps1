@@ -42,8 +42,10 @@ Function Get-IMDefinition
 
     [cmdletbinding()]
     param(
+        # Use to specify the name of the InstallManager Definition(s) to get.  Accepts Wildcard.
         [string]$Name
         ,
+        # Use to specify the Install Manager for the Definition(s) to get.   Used primarily for filtering in bulk operations or when multiple
         [InstallManager[]]$InstallManager
     )
     #$InstallManagers = @($InstallManager.foreach('ToString'))

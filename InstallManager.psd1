@@ -12,7 +12,7 @@
     RootModule        = '.\InstallManager.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.0.0.1'
+    ModuleVersion     = '0.0.0.2'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -27,7 +27,7 @@
     CompanyName       = 'themodulecollective'
 
     # Copyright statement for this module
-    Copyright         = '2019'
+    Copyright         = '2020'
 
     # Description of the functionality provided by this module
     # Description = ''
@@ -51,7 +51,9 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    # RequiredModules = @()
+    RequiredModules   = @(
+        @{ModuleName = 'Configuration'; ModuleVersion = '1.3.1' }
+    )
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()
@@ -70,23 +72,24 @@
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @(
-        'Edit-IMDefinitionFile'
-        'Import-IMDefinition'
-        'Get-IMInstalledByChoco'
-        'Get-IMInstalledModule'
-        'Get-IMUninstallEntry'
+        'Get-IMChocoInstall'
+        'Get-IMPowerShellGetInstall'
+        'Get-IMSystemUninstallEntry'
         'Get-IMDefinition'
-        'Update-IMinstall'
+        'Update-IMInstall'
+        'New-IMDefinition'
+        'Remove-IMDefinition'
+        'Set-IMDefinition'
     )
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    CmdletsToExport   = '*'
+    #CmdletsToExport   = '*'
 
     # Variables to export from this module
-    VariablesToExport = '*'
+    #VariablesToExport = '*'
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    AliasesToExport   = '*'
+    #AliasesToExport   = '*'
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()
