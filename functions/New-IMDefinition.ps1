@@ -39,9 +39,9 @@ function New-IMDefinition
     [parameter(Position = 5)]
     [bool]$AutoRemove = $true
     ,
-    # Use to specify any additional parameters required by the Install Manager (PowerShellGet or Chocolatey) when processing this definition
+    # Use to specify a hashtable of additional parameters required by the Install Manager (PowerShellGet or Chocolatey) when processing this definition. Do NOT Include the leading '-' or '--' when specifying parameter names. For Chocolatey options that require no value, use $null.  For PowerShellGet params such as bool or switch, use $true or $false as the value.
     [parameter(Position = 6)]
-    [string[]]$Parameter
+    [hashtable]$Parameter
     ,
     # Use to specify machines (by machinename/hostname) that should not process this Install Manager definition
     [parameter(Position = 7)]
@@ -51,6 +51,10 @@ function New-IMDefinition
     [parameter(Position = 8)]
     [ValidateNotNullOrEmpty()]
     [string]$Repository
+    ,
+    # Use to specify the Scope for a PowerShellGet Module
+    [parameter(Position = 9)]
+    [string]$Scope
   )
 
   begin
@@ -80,6 +84,7 @@ function New-IMDefinition
           AutoRemove      = $AutoRemove
           Parameter       = @($Parameter)
           ExemptMachine   = @($ExemptMachine)
+          Scope           = $Scope
         }
       )
     }

@@ -6,8 +6,8 @@ function Set-IMDefinition
   .DESCRIPTION
     Sets an InstallManager Definition and updates the current user's configuration
   .EXAMPLE
-    PS C:\> Set-IMDefinition -Name textpad -InstallManager Chocolatey
-    Sets the InstallManager Definition for textpad to use Install Manager Chocolatey
+    PS C:\> Set-IMDefinition -Name textpad -RequiredVersion 8.1.2
+    Sets the InstallManager Definition for textpad to require version 8.1.2
   .INPUTS
     None
   .OUTPUTS
@@ -18,12 +18,12 @@ function Set-IMDefinition
   [CmdletBinding()]
   param (
     # Specify the Name of the Module or Package to set
-    [Parameter(Mandatory, Position = 1)]
+    [Parameter(Mandatory, Position = 1, ValueFromPipelineByPropertyName)]
     [String]
     $Name
     ,
     # Specify the name of the Install Manager for the Definition to set - usually only necessary in the rare case where you have a name that exists in more then one Install Manager.
-    [Parameter(Position = 2)]
+    [Parameter(Position = 2, ValueFromPipelineByPropertyName)]
     [InstallManager]
     $InstallManager
     ,
@@ -39,9 +39,9 @@ function Set-IMDefinition
     [parameter(Position = 5)]
     [bool]$AutoRemove
     ,
-    # Use to specify any additional parameters required by the Install Manager (PowerShellGet or Chocolatey) when processing this definition
+    # Use to specify a hashtable of additional parameters required by the Install Manager (PowerShellGet or Chocolatey) when processing this definition. Do NOT Include the leading '-' or '--' when specifying parameter names.
     [parameter(Position = 6)]
-    [string[]]$Parameter
+    [hashtable]$Parameter
     ,
     # Use to specify machines (by machinename/hostname) that should not process this Install Manager definition
     [parameter(Position = 7)]
@@ -51,6 +51,10 @@ function Set-IMDefinition
     [parameter(Position = 8)]
     [ValidateNotNullOrEmpty()]
     [string]$Repository
+    ,
+    # Use to specify the Scope for a PowerShellGet Module
+    [parameter(Position = 9)]
+    [string]$Scope
   )
 
   begin
