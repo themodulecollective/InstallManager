@@ -15,7 +15,7 @@ function Remove-IMDefinition
   .NOTES
 
   #>
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess)]
   param (
     # Specify the Name of the Module or Package
     [Parameter(Mandatory, Position = 1)]
@@ -40,7 +40,10 @@ function Remove-IMDefinition
       1
       {
         $index = $script:ManagedInstalls.FindIndex( { param($d) ($d.name -eq $Name -and ($d.InstallManager -eq $InstallManager -or $null -eq $InstallManager)) })
-        $script:ManagedInstalls.RemoveAt($index)
+        if ($PSCmdlet.ShouldProcess("$($script:ManagedInstalls[$index])"))
+        {
+          $script:ManagedInstalls.RemoveAt($index)
+        }
       }
       0
       {

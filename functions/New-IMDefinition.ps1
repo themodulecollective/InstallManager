@@ -15,7 +15,7 @@ function New-IMDefinition
   .NOTES
 
   #>
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess)]
   param (
     # Specify the Name of the Module or Package
     [Parameter(Mandatory, Position = 1)]
@@ -65,28 +65,31 @@ function New-IMDefinition
   {
     if ($script:ManagedInstalls.where( { $_.Name -eq $Name -and $_.InstallManager -eq $InstallManager }).count -eq 0)
     {
-      [void]$script:ManagedInstalls.Add(
-        [pscustomobject]@{
-          Name            = $Name
-          InstallManager  = $InstallManager -as [String] #avoid an enum serialization warning from Configuration module
-          Repository      = if ([string]::IsNullOrWhiteSpace($repository))
+      $Definition =
+      [pscustomobject]@{
+        Name            = $Name
+        InstallManager  = $InstallManager -as [String] #avoid an enum serialization warning from Configuration module
+        Repository      = if ([string]::IsNullOrWhiteSpace($repository))
+        {
+          switch ($InstallManager)
           {
-            switch ($InstallManager)
-            {
-              'Chocolatey' { 'Community' }
-              'PowerShellGet' { 'PSGallery' }
-              Default { '' }
-            }
+            'Chocolatey' { 'chocolatey' }
+            'PowerShellGet' { 'PSGallery' }
+            Default { '' }
           }
-          else { $Repository }
-          RequiredVersion = @($RequiredVersion)
-          AutoUpgrade     = $AutoUpgrade
-          AutoRemove      = $AutoRemove
-          Parameter       = @($Parameter)
-          ExemptMachine   = @($ExemptMachine)
-          Scope           = $Scope
         }
-      )
+        else { $Repository }
+        RequiredVersion = switch ($PSBoundParameters.ContainsKey('RequiredVersion')) { $true { $RequiredVersion } $false { @() } }
+        AutoUpgrade     = $AutoUpgrade
+        AutoRemove      = $AutoRemove
+        Parameter       = switch ($PSBoundParameters.ContainsKey('Parameter')) { $true { $Parameter } $false { @{ } } }
+        ExemptMachine   = switch ($PSBoundParameters.ContainsKey('ExemptMachine')) { $true { $ExemptMachine } $false { @() } }
+        Scope           = $Scope
+      }
+      if ($PSCmdlet.ShouldProcess("$Definition"))
+      {
+        [void]$script:ManagedInstalls.Add($Definition)
+      }
     }
     else
     {

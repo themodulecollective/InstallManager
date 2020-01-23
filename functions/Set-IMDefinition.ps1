@@ -15,7 +15,7 @@ function Set-IMDefinition
   .NOTES
 
   #>
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess)]
   param (
     # Specify the Name of the Module or Package to set
     [Parameter(Mandatory, Position = 1, ValueFromPipelineByPropertyName)]
@@ -72,12 +72,14 @@ function Set-IMDefinition
         $keys = $PSBoundParameters.keys.ForEach( { $_ }) #avoid enumerating and modifying
         foreach ($k in $Keys)
         {
-          switch ($k -notin ('Name', 'InstallManager'))
+          switch ($k -in ('RequiredVersion', 'AutoUpgrade', 'AutoRemove', 'Parameter', 'ExemptMachine', 'Repository', 'Scope'))
           {
             $true
             {
-              if ($null -eq $PSBoundParameters.$k) { $PSBoundParameters.$k = @() }
-              $script:ManagedInstalls[$index].$($k) = $PSBoundParameters.$k
+              if ($PSCmdlet.ShouldProcess("$k = $($PSBoundParameters.$k) on: $($script:ManagedInstalls[$index])"))
+              {
+                $script:ManagedInstalls[$index].$($k) = $PSBoundParameters.$k
+              }
             }
             $false
             { }

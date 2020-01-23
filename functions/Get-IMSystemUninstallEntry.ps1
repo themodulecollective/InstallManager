@@ -1,11 +1,30 @@
 ﻿Function Get-IMSystemUninstallEntry
 {
-
+    <#
+.SYNOPSIS
+    Gets all uninstall entries from the windows registry
+.DESCRIPTION
+    Gets all uninstall entries from the windows registry
+.EXAMPLE
+    PS C:\> Get-IMSystemUninstallEntry
+    Gets a powershell object with a specified set of properties for each uninstall entry found in the windows registry.  Change the set of properties with the SpecifiedProperties parameter.
+.EXAMPLE
+    PS C:\> Get-IMSystemUninstallEntry -raw
+    Gets a powershell object with all available properties for each uninstall entry found in the windows registry
+.INPUTS
+    Inputs (if any)
+.OUTPUTS
+    Output (if any)
+.NOTES
+    General notes
+#>
     [cmdletbinding(DefaultParameterSetName = 'SpecifiedProperties')]
     param(
+        # Use to return all available properties for each uninstall entry
         [parameter(ParameterSetName = 'Raw')]
         [switch]$raw
         ,
+        # Use to override the default set of properties included with the uninstall entry output objects
         [parameter(ParameterSetName = 'SpecifiedProperties')]
         [string[]]$property = @('DisplayName', 'DisplayVersion', 'InstallDate', 'Publisher')
     )

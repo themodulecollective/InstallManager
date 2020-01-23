@@ -1,13 +1,105 @@
 ﻿Function Get-IMPowerShellGetInstall
 {
+    <#
+.SYNOPSIS
+    Gets an object with information about a Powershell Module, combining information from the module itself (if installed) and PowerShellGet.
+.DESCRIPTION
+    Gets an object with information about a Powershell Module, combining information from the module itself (if installed) and PowerShellGet.
+.EXAMPLE
+    PS C:\> Get-IMPowerShellGetInstall -Name Configuration
 
+    Name                                 : Configuration
+    Version                              : 1.3.1
+    IsLatestVersion                      : True
+    AllInstalledVersions                 : {1.3.1}
+    InstalledFromRepository              : True
+    Repository                           : PSGallery
+    InstalledLocation                    : C:\Program Files\PowerShell\Modules\Configuration\1.3.1
+    InstalledDate                        : 12/11/2019 5:31:28 PM
+    PublishedDate                        : 7/12/2018 4:45:53 AM
+    LatestRepositoryVersion              : 1.3.1
+    LatestRepositoryVersionPublishedDate : 7/12/2018 4:45:53 AM
+    LatestVersionInstalled               : True
+
+    Gets an object with information about the Configuration module, a module that was installed with PowerShellGet module
+.EXAMPLE
+    Get-IMPowerShellGetInstall pscloudflare
+
+    Name                                 : pscloudflare
+    Version                              : 0.0.8
+    IsLatestVersion                      : False
+    AllInstalledVersions                 : {0.0.5, 0.0.4, 0.0.8}
+    InstalledFromRepository              : False
+    Repository                           :
+    InstalledLocation                    : ...\GitRepos\PSModules\PSCloudflare
+    InstalledDate                        :
+    PublishedDate                        :
+    LatestRepositoryVersion              : 0.0.7
+    LatestRepositoryVersionPublishedDate : 1/11/2018 7:25:53 PM
+    LatestVersionInstalled               :
+
+    Gets an object with information about the PSCloudflare module, a module that has multiple versions installed and also has a version from a local git repository.
+.EXAMPLE
+
+    Get-IMPowerShellGetInstall pscloudflare -PerInstalledVersion
+
+    Name                                 : pscloudflare
+    Version                              : 0.0.5
+    IsLatestVersion                      : False
+    AllInstalledVersions                 : {0.0.5, 0.0.4, 0.0.8}
+    InstalledFromRepository              : True
+    Repository                           : PSGallery
+    InstalledLocation                    : C:\Program Files\PowerShell\Modules\PSCloudFlare\0.0.5
+    InstalledDate                        : 1/22/2020 8:04:27 PM
+    PublishedDate                        : 12/14/2017 4:00:44 AM
+    LatestRepositoryVersion              : 0.0.7
+    LatestRepositoryVersionPublishedDate : 1/11/2018 7:25:53 PM
+    LatestVersionInstalled               : False
+
+    Name                                 : pscloudflare
+    Version                              : 0.0.4
+    IsLatestVersion                      : False
+    AllInstalledVersions                 : {0.0.5, 0.0.4, 0.0.8}
+    InstalledFromRepository              : True
+    Repository                           : PSGallery
+    InstalledLocation                    : C:\Program Files\PowerShell\Modules\PSCloudFlare\0.0.4
+    InstalledDate                        : 1/22/2020 8:04:24 PM
+    PublishedDate                        : 12/22/2016 6:02:37 PM
+    LatestRepositoryVersion              : 0.0.7
+    LatestRepositoryVersionPublishedDate : 1/11/2018 7:25:53 PM
+    LatestVersionInstalled               : False
+
+    Name                                 : pscloudflare
+    Version                              : 0.0.8
+    IsLatestVersion                      : False
+    AllInstalledVersions                 : {0.0.5, 0.0.4, 0.0.8}
+    InstalledFromRepository              : False
+    Repository                           :
+    InstalledLocation                    : C:\Users\MikeCampbell\GitRepos\PSModules\PSCloudflare
+    InstalledDate                        :
+    PublishedDate                        :
+    LatestRepositoryVersion              : 0.0.7
+    LatestRepositoryVersionPublishedDate : 1/11/2018 7:25:53 PM
+    LatestVersionInstalled               :
+
+    Gets an object with information about each installed version the PSCloudFlare module, a module that has multiple versions installed and also has a version from a local git repository.
+.INPUTS
+    Inputs (if any)
+.OUTPUTS
+    Output (if any)
+.NOTES
+    General notes
+#>
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param(
+        # Use to specify the name of one or more modules for which to get installation information
         [parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'Named', Position = 1)]
         [string[]]$Name
         ,
+        # use to specify an alternative repository.  The repository should already be registered on the system.
         [string]$Repository
         ,
+        # use to get an object per installed version of the specified module(s)
         [switch]$PerInstalledVersion
     )
     begin
