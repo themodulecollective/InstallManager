@@ -91,7 +91,7 @@ function Update-IMInstall
                     {
                         $installedModuleInfo = Get-IMPowerShellGetInstall -Name $Name
                         [System.Collections.ArrayList]$keepVersions = @()
-                        $RequiredVersion.split(';').ForEach( { $keepVersions.add($_) }) | Out-Null
+                        $RequiredVersion.ForEach( { $keepVersions.add($_) }) | Out-Null
                         if ($true -eq $autoupgrade)
                         {
                             $keepVersions.add($installedModuleInfo.LatestRepositoryVersion) | Out-Null

@@ -73,7 +73,7 @@ function New-IMDefinition
         {
           switch ($InstallManager)
           {
-            'Chocolatey' { 'chocolatey' }
+            #'Chocolatey' { '' }
             'PowerShellGet' { 'PSGallery' }
             Default { '' }
           }
