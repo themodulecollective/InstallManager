@@ -19,9 +19,8 @@ function Update-IMInstall
         [String[]]$ExemptMachine
         ,
         [Parameter(ValueFromPipelineByPropertyName)]
-        [ValidateNotNullOrEmpty()]
-        [Alias('Parameter')]
-        [hashtable]$AdditionalParameter
+        [AllowNull()]
+        [hashtable]$Parameter
         ,
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [InstallManager]$InstallManager
@@ -50,7 +49,7 @@ function Update-IMInstall
                     $installedModuleInfo = Get-IMPowerShellGetInstall -Name $Name
                     $installModuleParams = @{
                         Name          = $Name
-                        Scope         = switch ([string]::IsNullOrWhiteSpace($Scope)) {$true {'CurrentUser'} $false {$Scope}}
+                        Scope         = switch ([string]::IsNullOrWhiteSpace($Scope)) { $true { 'CurrentUser' } $false { $Scope } }
                         Force         = $true
                         AcceptLicense = $true
                         AllowClobber  = $true
