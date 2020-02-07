@@ -43,11 +43,18 @@ Function Get-IMDefinition
     [cmdletbinding()]
     param(
         # Use to specify the name of the InstallManager Definition(s) to get.  Accepts Wildcard.
+        [parameter(ValueFromPipeline,ValueFromPipelineByPropertyName)]
         [string]$Name
         ,
         # Use to specify the Install Manager for the Definition(s) to get.   Used primarily for filtering in bulk operations or when multiple
         [InstallManager[]]$InstallManager
     )
-    #$InstallManagers = @($InstallManager.foreach('ToString'))
-    $Script:ManagedInstalls.where( { ([string]::IsNullOrEmpty($Name) -or $_.Name -like $Name) }).where( { $InstallManager.count -eq 0 -or $_.InstallManager -in $InstallManager })
+
+    process
+    {
+        foreach ($n in $name)
+        {
+            $Script:ManagedInstalls.where( { ([string]::IsNullOrEmpty($n) -or $_.Name -like $n) }).where( { $InstallManager.count -eq 0 -or $_.InstallManager -in $InstallManager })
+        }
+    }
 }
