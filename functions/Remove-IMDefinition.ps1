@@ -15,17 +15,21 @@ function Remove-IMDefinition
   .NOTES
 
   #>
-  [CmdletBinding(SupportsShouldProcess)]
+  [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Name')]
   param (
     # Specify the Name of the Module or Package
-    [Parameter(Mandatory, Position = 1)]
+    [Parameter(Mandatory, Position = 1, ParameterSetName = 'Name')]
     [String]
     $Name
     ,
     # Specify the name of the Install Manager to use for the Module (PowerShellGet) or Package (Chocolatey)
-    [Parameter(Position = 2)]
+    [Parameter(Position = 2, ParameterSetName = 'Name')]
     [InstallManager]
     $InstallManager
+    ,
+    [Parameter(ValueFromPipeline, ParameterSetName = 'IMDefinition')]
+    [ValidateScript( { $_.psobject.TypeNames[0] -eq 'IMDefinition' })]
+    [psobject]$IMDefinition
   )
 
   begin
@@ -34,8 +38,19 @@ function Remove-IMDefinition
   }
   process
   {
-    $Definition = $script:ManagedInstalls.where( { $_.Name -eq $Name -and ($_.InstallManager -eq $InstallManager -or $null -eq $InstallManager) })
-    switch ($Definition.count)
+    switch ($PSCmdlet.ParameterSetName)
+    {
+      'Name'
+      {
+        $IMDefinition = $script:ManagedInstalls.where( { $_.Name -eq $Name -and ($_.InstallManager -eq $InstallManager -or $null -eq $InstallManager) })
+      }
+      'IMDefinition'
+      {
+        $Name = $IMDefinition.Name
+        $InstallManager = $IMDefinition.InstallManager
+      }
+    }
+    switch ($IMDefinition.count)
     {
       1
       {

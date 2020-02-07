@@ -15,17 +15,21 @@ function Set-IMDefinition
   .NOTES
 
   #>
-  [CmdletBinding(SupportsShouldProcess)]
+  [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Name')]
   param (
     # Specify the Name of the Module or Package to set
-    [Parameter(Mandatory, Position = 1, ValueFromPipelineByPropertyName)]
+    [Parameter(Mandatory, Position = 1, ValueFromPipelineByPropertyName, ParameterSetName = 'Name')]
     [String]
     $Name
     ,
     # Specify the name of the Install Manager for the Definition to set - usually only necessary in the rare case where you have a name that exists in more then one Install Manager.
-    [Parameter(Position = 2, ValueFromPipelineByPropertyName)]
+    [Parameter(Position = 2, ValueFromPipelineByPropertyName, ParameterSetName = 'Name')]
     [InstallManager]
     $InstallManager
+    ,
+    [Parameter(ValueFromPipeline, ParameterSetName = 'IMDefinition')]
+    [ValidateScript( { $_.psobject.TypeNames[0] -eq 'IMDefinition' })]
+    [psobject]$IMDefinition
     ,
     # Use to Specify one or more required versions for PowerShell Modules or a single version to pin for choco packages
     [parameter(Position = 3)]
@@ -63,8 +67,20 @@ function Set-IMDefinition
   }
   process
   {
-    $Definition = $script:ManagedInstalls.where( { $_.Name -eq $Name -and ($_.InstallManager -eq $InstallManager -or $null -eq $InstallManager) })
-    switch ($Definition.count)
+    switch ($PSCmdlet.ParameterSetName)
+    {
+      'Name'
+      {
+        $IMDefinition = $script:ManagedInstalls.where( { $_.Name -eq $Name -and ($_.InstallManager -eq $InstallManager -or $null -eq $InstallManager) })
+      }
+      'IMDefinition'
+      {
+        $Name = $IMDefinition.Name
+        $InstallManager = $IMDefinition.InstallManager
+      }
+    }
+
+    switch ($IMDefinition.count)
     {
       1
       {
