@@ -54,6 +54,7 @@ function New-IMDefinition
     ,
     # Use to specify the Scope for a PowerShellGet Module
     [parameter(Position = 9)]
+    [ValidateSet('AllUsers','CurrentUser')]
     [string]$Scope
   )
 
