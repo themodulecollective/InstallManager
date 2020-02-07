@@ -67,6 +67,7 @@ function New-IMDefinition
     {
       $Definition =
       [pscustomobject]@{
+        PSTypeName      = 'IMDefinition'
         Name            = $Name
         InstallManager  = $InstallManager -as [String] #avoid an enum serialization warning from Configuration module
         Repository      = if ([string]::IsNullOrWhiteSpace($repository))
