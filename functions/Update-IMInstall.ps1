@@ -1,5 +1,21 @@
 function Update-IMInstall
 {
+    <#
+    .SYNOPSIS
+        Processes an IMDefinition to install, update, or remove (future) the associated package, module, or repo (future)
+    .DESCRIPTION
+        Processes an IMDefinition to install, update, or remove (future) the associated package, module, or repo (future)
+    .EXAMPLE
+        Set-IMDefinition -Name rufus -InstallManager Chocolatey
+        Get-IMDefinition -Name rufus | Update-IMinstall
+        processes the newly created IMDefinition for the rufus package and installs or updates the package as appropriate
+    .INPUTS
+        Inputs (if any)
+    .OUTPUTS
+        Output (if any)
+    .NOTES
+        General notes
+    #>
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'IMDefinition')]
     param (
         #Allows submission of an IMDefinition object via pipeline or named parameter
