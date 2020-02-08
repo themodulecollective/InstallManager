@@ -15,7 +15,7 @@ function Remove-IMInstall
   .NOTES
     General notes
   #>
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess)]
   param (
 
   )
@@ -27,7 +27,8 @@ function Remove-IMInstall
 
   process
   {
-
+    if ($PSCmdlet.ShouldProcess())
+    {}
   }
 
   end
