@@ -89,7 +89,10 @@ function Update-IMInstall
                             {
                                 if ($false -eq $installedModuleInfo.IsLatestVersion -or $null -eq $installedModuleInfo.IsLatestVersion)
                                 {
-                                    Install-Module @installModuleParams
+                                    if ($PSCmdlet.ShouldProcess("Install-Module " + $($installModuleParams.GetEnumerator().foreach( { '-' + $_.Name + ' ' + $_.Value }) -join ' ')))
+                                    {
+                                        Install-Module @installModuleParams
+                                    }
                                 }
                             }
                             $false
@@ -105,7 +108,10 @@ function Update-IMInstall
                                 if ($rv -notin $installedModuleInfo.AllInstalledVersions)
                                 {
                                     $installModuleParams.RequiredVersion = $rv
-                                    Install-Module @installModuleParams
+                                    if ($PSCmdlet.ShouldProcess("Install-Module " + $($installModuleParams.GetEnumerator().foreach( { '-' + $_.Name + ' ' + $_.Value }) -join ' ')))
+                                    {
+                                        Install-Module @installModuleParams
+                                    }
                                 }
                             }
                         }
@@ -129,7 +135,10 @@ function Update-IMInstall
                             foreach ($rV in $removeVersions)
                             {
                                 $UninstallModuleParams.RequiredVersion = $rV
-                                Uninstall-Module @UninstallModuleParams
+                                if ($PSCmdlet.ShouldProcess("Uninstall-Module " + $($uninstallModuleParams.GetEnumerator().foreach( { '-' + $_.Name + ' ' + $_.Value }) -join ' ')))
+                                {
+                                    Uninstall-Module @UninstallModuleParams
+                                }
                             }
                         }
                     }
