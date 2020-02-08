@@ -52,16 +52,17 @@ function Update-IMInstall
         }
         foreach ($imd in $IMDefinition)
         {
-            if ($localmachinename -notin $imd.ExemptMachine)
+            $InstallManager = $imd.InstallManager
+            $Name = $imd.Name
+            $RequiredVersion = $imd.RequiredVersion
+            $AutoUpgrade = $imd.AutoUpgrade
+            $AutoRemove = $imd.AutoRemove
+            $ExemptMachine = $imd.ExemptMachine
+            $Parameter = $imd.Parameter
+            $Scope = $imd.Scope
+            if ($localmachinename -notin $ExemptMachine)
             {
-                $InstallManager = $imd.InstallManager
-                $Name = $imd.Name
-                $RequiredVersion = $imd.RequiredVersion
-                $AutoUpgrade = $imd.AutoUpgrade
-                $AutoRemove = $imd.AutoRemove
-                $ExemptMachine = $imd.ExemptMachine
-                $Parameter = $imd.Parameter
-                $Scope = $imd.Scope
+
                 Write-Information -MessageData "Using $InstallManager to Process Install Definition: $Name"
                 switch ($InstallManager)
                 {
