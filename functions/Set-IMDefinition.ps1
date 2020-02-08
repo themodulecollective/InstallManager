@@ -17,7 +17,7 @@ function Set-IMDefinition
   #>
   [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Name')]
   param (
-    # Specify the Name of the Module or Package to set
+    # Specify the Name of the Module or Package for which to set the IMDefintion
     [Parameter(Mandatory, Position = 1, ValueFromPipelineByPropertyName, ParameterSetName = 'Name')]
     [String]
     $Name
