@@ -27,6 +27,7 @@ function Set-IMDefinition
     [InstallManager]
     $InstallManager
     ,
+    #Allows submission of an IMDefinition object via pipeline or named parameter
     [Parameter(ValueFromPipeline, ParameterSetName = 'IMDefinition')]
     [ValidateScript( { $_.psobject.TypeNames[0] -eq 'IMDefinition' })]
     [psobject]$IMDefinition
@@ -58,7 +59,7 @@ function Set-IMDefinition
     ,
     # Use to specify the Scope for a PowerShellGet Module
     [parameter(Position = 9)]
-    [ValidateSet('AllUsers','CurrentUser')]
+    [ValidateSet('AllUsers', 'CurrentUser')]
     [string]$Scope
   )
 

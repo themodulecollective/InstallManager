@@ -27,6 +27,7 @@ function Remove-IMDefinition
     [InstallManager]
     $InstallManager
     ,
+    # Allows submission of an IMDefinition object via pipeline or named parameter
     [Parameter(ValueFromPipeline, ParameterSetName = 'IMDefinition')]
     [ValidateScript( { $_.psobject.TypeNames[0] -eq 'IMDefinition' })]
     [psobject]$IMDefinition
