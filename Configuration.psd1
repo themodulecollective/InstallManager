@@ -1,4 +1,0 @@
-@{
-    UserSpecifiedDefinitionsPath = ''
-    Definitions                  = @()
-}
