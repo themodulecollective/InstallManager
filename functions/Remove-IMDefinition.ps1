@@ -29,8 +29,8 @@ function Remove-IMDefinition
     ,
     # Allows submission of an IMDefinition object via pipeline or named parameter
     [Parameter(ValueFromPipeline, ParameterSetName = 'IMDefinition')]
-    [ValidateScript( { $_.psobject.TypeNames[0] -eq 'IMDefinition' })]
-    [psobject]$IMDefinition
+    [ValidateScript( { $_.psobject.TypeNames[0] -like '*IMDefinition*' })]
+    $IMDefinition
   )
 
   begin
@@ -43,34 +43,38 @@ function Remove-IMDefinition
     {
       'Name'
       {
-        $IMDefinition = $script:ManagedInstalls.where( { $_.Name -eq $Name -and ($_.InstallManager -eq $InstallManager -or $null -eq $InstallManager) })
-      }
-      'IMDefinition'
-      {
-        $Name = $IMDefinition.Name
-        $InstallManager = $IMDefinition.InstallManager
-      }
-    }
-    switch ($IMDefinition.count)
-    {
-      1
-      {
-        $index = $script:ManagedInstalls.FindIndex( { param($d) ($d.name -eq $Name -and ($d.InstallManager -eq $InstallManager -or $null -eq $InstallManager)) })
-        if ($PSCmdlet.ShouldProcess("$($script:ManagedInstalls[$index])"))
+        $IMDefinition = @(Get-IMDefinition -Name $Name -InstallManager $InstallManager)
+        switch ($IMDefinition.count)
         {
-          $script:ManagedInstalls.RemoveAt($index)
+          0
+          {
+            Write-Warning -Message "Not Found: InstallManager Definition for $Name"
+            Return
+          }
+          1
+          {
+            #All OK - found just one Definition to Remove
+          }
+          Default
+          {
+            throw("Ambiguous: InstallManager Definition for $Name.  Try being more specific by specifying the InstallManager.")
+          }
         }
       }
-      0
-      {
-        throw("Not Found: InstallManager Definition for $Name")
+    }
+    foreach ($imd in $IMDefinition)
+    {
+      $remConfigParams = @{
+        Module = $MyInvocation.MyCommand.ModuleName
+        Name   = "Definitions.$($imd.InstallManager).$($imd.Name)"
       }
-      Default
+      if ($PSCmdlet.ShouldProcess("Name = $($imd.Name); InstallManager = $($imd.InstallManager)"))
       {
-        throw("Ambiguous: InstallManager Definition for $Name.  Try being more specific by specifying the InstallManager.")
+        Set-PSFConfig @remConfigParams -AllowDelete
+        $remConfigParams.Confirm = $false
+        Remove-PSFConfig @remConfigParams
       }
     }
-    @{Definitions = $script:ManagedInstalls } | Export-Configuration -WarningAction 'SilentlyContinue' #enums being serialized cause a warning
   }
 
   end

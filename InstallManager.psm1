@@ -2,14 +2,15 @@
 ###############################################################################################
 # Module Variables
 ###############################################################################################
-$ModuleVariableNames = ('ManagedInstalls', 'IMConfiguration')
+$ModuleVariableNames = ('IMConfiguration')
 $ModuleVariableNames.ForEach( { Set-Variable -Scope Script -Name $_ -Value $null })
 enum InstallManager { Chocolatey; Git; PowerShellGet; Manual }
 ###############################################################################################
 # Module Functions
 ###############################################################################################
-$AllFunctionFiles = (Get-ChildItem -Recurse -File -Filter *.ps1 -Path $(Join-Path -Path $PSScriptRoot -ChildPath 'Functions')).where({
+$AllFunctionFiles = (Get-ChildItem -Recurse -File -Filter *.ps1 -Path $(Join-Path -Path $PSScriptRoot -ChildPath 'Functions')).where( {
     $_.BaseName -in @(
+      'Export-IMConfiguration'
       'Get-IMChocoInstall'
       'Get-IMPowerShellGetInstall'
       'Get-IMSystemUninstallEntry'
@@ -20,7 +21,7 @@ $AllFunctionFiles = (Get-ChildItem -Recurse -File -Filter *.ps1 -Path $(Join-Pat
       'Remove-IMDefinition'
       'Set-IMDefinition'
     )
-})
+  })
 
 $AllFunctionFiles.foreach( { . $_.fullname })
 ###############################################################################################

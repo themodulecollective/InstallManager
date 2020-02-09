@@ -20,7 +20,7 @@ function Update-IMInstall
     param (
         #Allows submission of an IMDefinition object via pipeline or named parameter
         [Parameter(ValueFromPipeline, ParameterSetName = 'IMDefinition')]
-        [ValidateScript( { $_.psobject.TypeNames[0] -eq 'IMDefinition' })]
+        [ValidateScript( { $_.psobject.TypeNames[0] -like '*IMDefinition' })]
         [psobject]$IMDefinition
         ,
         # Specify the Name of the Module or Package for which to update the Install
@@ -47,7 +47,7 @@ function Update-IMInstall
 
             'Name'
             {
-                $IMDefinition = @($script:ManagedInstalls.where( { $_.Name -eq $Name -and ($_.InstallManager -eq $InstallManager -or $null -eq $InstallManager) }))
+                $IMDefinition = @(Get-IMDefinition -Name $Name -InstallManager $InstallManager)
             }
         }
         foreach ($imd in $IMDefinition)

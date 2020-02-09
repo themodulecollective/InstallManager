@@ -73,48 +73,53 @@ function Set-IMDefinition
     {
       'Name'
       {
-        $IMDefinition = $script:ManagedInstalls.where( { $_.Name -eq $Name -and ($_.InstallManager -eq $InstallManager -or $null -eq $InstallManager) })
-      }
-      'IMDefinition'
-      {
-        $Name = $IMDefinition.Name
-        $InstallManager = $IMDefinition.InstallManager
-      }
-    }
-
-    switch ($IMDefinition.count)
-    {
-      1
-      {
-        $index = $script:ManagedInstalls.FindIndex( { param($d) ($d.name -eq $Name -and ($d.InstallManager -eq $InstallManager -or $null -eq $InstallManager)) })
-        $keys = $PSBoundParameters.keys.ForEach( { $_ }) #avoid enumerating and modifying
-        foreach ($k in $Keys)
+        $IMDefinition = @(Get-IMDefinition -Name $Name -InstallManager $InstallManager)
+        switch ($IMDefinition.count)
         {
-          switch ($k -in ('RequiredVersion', 'AutoUpgrade', 'AutoRemove', 'Parameter', 'ExemptMachine', 'Repository', 'Scope'))
+          0
           {
-            $true
-            {
-              if ($PSCmdlet.ShouldProcess("$k = $($PSBoundParameters.$k) on: $($script:ManagedInstalls[$index])"))
-              {
-                $script:ManagedInstalls[$index].$($k) = $PSBoundParameters.$k
-              }
-            }
-            $false
-            { }
+            Write-Warning -Message "Not Found: InstallManager Definition for $Name"
+            Return
+          }
+          1
+          {
+            #All OK - found just one Definition to Set
+          }
+          Default
+          {
+            throw("Ambiguous: InstallManager Definition for $Name.  Try being more specific by specifying the InstallManager.")
           }
         }
-
-      }
-      0
-      {
-        throw("Not Found: InstallManager Definition for $Name")
-      }
-      Default
-      {
-        throw("Ambiguous: InstallManager Definition for $Name.  Try being more specific by specifying the InstallManager.")
       }
     }
-    @{Definitions = $script:ManagedInstalls } | Export-Configuration -WarningAction 'SilentlyContinue' #enums being serialized cause a warning
+
+    foreach ($imd in $IMDefinition)
+    {
+      $keys = $PSBoundParameters.keys.ForEach( { $_ }) #avoid enumerating and modifying
+      foreach ($k in $keys)
+      {
+        switch ($k -in ('RequiredVersion', 'AutoUpgrade', 'AutoRemove', 'Parameter', 'ExemptMachine', 'Repository', 'Scope'))
+        {
+          $true
+          {
+              $imd.$k = $PSBoundParameters.$k
+          }
+          $false
+          { }
+        }
+      }
+      if ($PSCmdlet.ShouldProcess("$imd"))
+      {
+        $SetConfigParams = @{
+          Module      = $MyInvocation.MyCommand.ModuleName
+          AllowDelete = $true
+          Passthru    = $true
+          Name        = "Definitions.$($imd.InstallManager).$($imd.Name)"
+          Value       = $imd
+        }
+        Set-PSFConfig @SetConfigParams | Register-PSFConfig
+      }
+    }
   }
 
   end

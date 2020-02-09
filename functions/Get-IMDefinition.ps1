@@ -40,21 +40,58 @@ Function Get-IMDefinition
         General notes
     #>
 
-    [cmdletbinding()]
+    [cmdletbinding(DefaultParameterSetName = 'All')]
     param(
         # Use to specify the name of the InstallManager Definition(s) to get.  Accepts Wildcard.
-        [parameter(ValueFromPipeline,ValueFromPipelineByPropertyName)]
+        [parameter(ValueFromPipeline, ValueFromPipelineByPropertyName,ParameterSetName = 'Name')]
         [string]$Name
         ,
         # Use to specify the Install Manager for the Definition(s) to get.   Used primarily for filtering in bulk operations or when multiple
+        [parameter(ValueFromPipelineByPropertyName)]
         [InstallManager[]]$InstallManager
     )
 
     process
     {
-        foreach ($n in $name)
+        switch ($PSCmdlet.ParameterSetName)
         {
-            $Script:ManagedInstalls.where( { ([string]::IsNullOrEmpty($n) -or $_.Name -like $n) }).where( { $InstallManager.count -eq 0 -or $_.InstallManager -in $InstallManager })
+            'Name'
+            {
+                foreach ($n in $Name)
+                {
+                    switch ($InstallManager.count)
+                    {
+                        0
+                        {
+                            (Get-PSFConfig -Module InstallManager -Name Definitions.*.$($n)).foreach( { Get-PSFConfigValue -FullName $_.FullName })
+                        }
+                        Default
+                        {
+                            foreach ($im in $InstallManager)
+                            {
+                                (Get-PSFConfig -Module InstallManager -Name Definitions.$($im).$($n)).foreach( { Get-PSFConfigValue -FullName $_.FullName })
+                            }
+                        }
+                    }
+                }
+            }
+            'All'
+            {
+                switch ($InstallManager.count)
+                {
+                    0
+                    {
+                        (Get-PSFConfig -Module InstallManager -Name Definitions.*).foreach( { Get-PSFConfigValue -FullName $_.FullName })
+                    }
+                    Default
+                    {
+                        foreach ($im in $InstallManager)
+                        {
+                            (Get-PSFConfig -Module InstallManager -Name Definitions.$($im).*).foreach( { Get-PSFConfigValue -FullName $_.FullName })
+                        }
+                    }
+                }
+            }
         }
     }
 }

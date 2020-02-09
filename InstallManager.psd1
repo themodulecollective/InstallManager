@@ -52,7 +52,7 @@
 
     # Modules that must be imported into the global environment prior to importing this module
     RequiredModules   = @(
-        @{ModuleName = 'Configuration'; ModuleVersion = '1.3.1' }
+        @{ModuleName = 'PSFramework'; ModuleVersion = '1.1.59' }
     )
 
     # Assemblies that must be loaded prior to importing this module
@@ -72,6 +72,7 @@
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @(
+        'Export-IMConfiguration'
         'Get-IMChocoInstall'
         'Get-IMPowerShellGetInstall'
         'Get-IMSystemUninstallEntry'

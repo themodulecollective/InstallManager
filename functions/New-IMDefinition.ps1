@@ -54,7 +54,7 @@ function New-IMDefinition
     ,
     # Use to specify the Scope for a PowerShellGet Module
     [parameter(Position = 9)]
-    [ValidateSet('AllUsers','CurrentUser')]
+    [ValidateSet('AllUsers', 'CurrentUser')]
     [string]$Scope
   )
 
@@ -64,7 +64,7 @@ function New-IMDefinition
   }
   process
   {
-    if ($script:ManagedInstalls.where( { $_.Name -eq $Name -and $_.InstallManager -eq $InstallManager }).count -eq 0)
+    if ((Get-IMDefinition -Name $Name -InstallManager $InstallManager).count -eq 0)
     {
       $Definition =
       [pscustomobject]@{
@@ -90,14 +90,20 @@ function New-IMDefinition
       }
       if ($PSCmdlet.ShouldProcess("$Definition"))
       {
-        [void]$script:ManagedInstalls.Add($Definition)
+        $SetConfigParams = @{
+          Module      = $MyInvocation.MyCommand.ModuleName
+          AllowDelete = $true
+          Passthru    = $true
+          Name        = "Definitions.$Installmanager.$Name"
+          Value       = $Definition
+        }
+        Set-PSFConfig @SetConfigParams | Register-PSFConfig
       }
     }
     else
     {
       throw("Definition for $Name with $InstallManager as the InstallManager already exists. To modify it, use Set-IMDefinition")
     }
-    @{Definitions = $script:ManagedInstalls } | Export-Configuration
   }
 
   end
