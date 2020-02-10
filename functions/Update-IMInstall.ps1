@@ -76,7 +76,7 @@ function Update-IMInstall
                             AcceptLicense = $true
                             AllowClobber  = $true
                         }
-                        if ($PSBoundParameters.ContainsKey('Parameter'))
+                        if ($Parameter.count -ge 1)
                         {
                             foreach ($key in $Parameter.keys)
                             {
@@ -146,14 +146,14 @@ function Update-IMInstall
                     {
                         $installedModuleInfo = Get-IMChocoInstall -Name $Name
                         $options = ''
-                        if ($PSBoundParameters.ContainsKey('AdditionalParameter'))
+                        if ($Parameter.count -ge 1)
                         {
-                            foreach ($key in $AdditionalParameter.keys)
+                            foreach ($key in $Parameter.keys)
                             {
                                 $options += "--$key"
-                                if (-not [string]::IsNullOrWhiteSpace($AdditionalParameter.$key))
+                                if (-not [string]::IsNullOrWhiteSpace($Parameter.$key))
                                 {
-                                    $options += "=`"'$AdditionalParameter.$key'`" "
+                                    $options += "=`"'$Parameter.$key'`" "
                                 }
                                 else
                                 {
