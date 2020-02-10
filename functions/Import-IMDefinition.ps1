@@ -15,6 +15,7 @@ Function Import-IMDefinition
     [cmdletbinding()]
     param
     (
+        #Specify the file to Import, should be json format, exported with Export-IMDefinition.
         [Parameter(Mandatory)]
         [ValidateScript( { Test-Path -PathType Leaf -Path $_ })]
         $FilePath
