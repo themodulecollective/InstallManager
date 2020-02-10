@@ -10,12 +10,13 @@ enum InstallManager { Chocolatey; Git; PowerShellGet; Manual }
 ###############################################################################################
 $AllFunctionFiles = (Get-ChildItem -Recurse -File -Filter *.ps1 -Path $(Join-Path -Path $PSScriptRoot -ChildPath 'Functions')).where( {
     $_.BaseName -in @(
-      'Export-IMConfiguration'
+      'Export-IMDefinition'
       'Get-IMChocoInstall'
       'Get-IMPowerShellGetInstall'
       'Get-IMSystemUninstallEntry'
       'Get-IMDefinition'
-      'Import-IMModuleConfig'
+      'Import-IMDefinition'
+      'Import-IMConfiguration'
       'Update-IMInstall'
       'New-IMDefinition'
       'Remove-IMDefinition'
@@ -33,4 +34,4 @@ $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove =
 ###############################################################################################
 # Module Ready for User
 ###############################################################################################
-Import-IMModuleConfig
+Import-IMConfiguration
