@@ -43,11 +43,11 @@ Function Get-IMDefinition
     [cmdletbinding(DefaultParameterSetName = 'All')]
     param(
         # Use to specify the name of the InstallManager Definition(s) to get.  Accepts Wildcard.
-        [parameter(ValueFromPipeline, ValueFromPipelineByPropertyName,ParameterSetName = 'Name')]
-        [string]$Name
+        [parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'Name', Position = 1)]
+        [string[]]$Name
         ,
         # Use to specify the Install Manager for the Definition(s) to get.   Used primarily for filtering in bulk operations or when multiple
-        [parameter(ValueFromPipelineByPropertyName)]
+        [parameter(ValueFromPipelineByPropertyName, Position = 2)]
         [InstallManager[]]$InstallManager
     )
 

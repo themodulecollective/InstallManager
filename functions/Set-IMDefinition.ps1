@@ -29,7 +29,7 @@ function Set-IMDefinition
     ,
     #Allows submission of an IMDefinition object via pipeline or named parameter
     [Parameter(ValueFromPipeline, ParameterSetName = 'IMDefinition')]
-    [ValidateScript( { $_.psobject.TypeNames[0] -eq 'IMDefinition' })]
+    [ValidateScript( { $_.psobject.TypeNames[0] -like '*IMDefinition' })]
     [psobject]$IMDefinition
     ,
     # Use to Specify one or more required versions for PowerShell Modules or a single version to pin for choco packages

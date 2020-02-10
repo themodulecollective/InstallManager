@@ -29,7 +29,7 @@ function Remove-IMDefinition
     ,
     # Allows submission of an IMDefinition object via pipeline or named parameter
     [Parameter(ValueFromPipeline, ParameterSetName = 'IMDefinition')]
-    [ValidateScript( { $_.psobject.TypeNames[0] -like '*IMDefinition*' })]
+    [ValidateScript( { $_.psobject.TypeNames[0] -like '*IMDefinition' })]
     $IMDefinition
   )
 
