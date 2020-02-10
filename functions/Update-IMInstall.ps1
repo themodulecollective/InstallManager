@@ -192,7 +192,7 @@ function Update-IMInstall
             }
             else
             {
-                Write-Information -MessageData "$localmachinenanme is present in ExemptMachines for Install Definition $Name"
+                Write-Information -MessageData "$localmachinename is present in ExemptMachines for Install Definition $Name"
             }
         }
     }
