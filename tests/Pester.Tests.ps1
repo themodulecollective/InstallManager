@@ -1,8 +1,11 @@
 $CommandName = $MyInvocation.MyCommand.Name.Replace(".Tests.ps1", "")
-$Script:ModuleRoot = $(Split-Path -Path $PSScriptRoot -Parent)
-Write-Information -MessageData "Module Root is $script:ModuleRoot" -InformationAction Continue
-$Script:ModuleName = $(Split-Path -$Script:ModuleRoot -Leaf)
+Write-Information -MessageData "Command is $CommandName" -InformationAction Continue
+$Script:ProjectRoot = $(Split-Path -Path $PSScriptRoot -Parent)
+Write-Information -MessageData "ProjectRoot is $Script:ProjectRoot" -InformationAction Continue
+$Script:ModuleName = $(Split-Path -path $(Split-Path $PSScriptRoot -Parent) -Leaf)
 Write-Information -MessageData "Module Name is $Script:ModuleName" -InformationAction Continue
+$Script:ModuleRoot = $(Join-Path -Path $(Split-Path -Path $PSScriptRoot -Parent) -ChildPath $Script:ModuleName)
+Write-Information -MessageData "Module Root is $script:ModuleRoot" -InformationAction Continue
 $Script:ModuleFile = $Script:ModuleFile = Join-Path -Path $($Script:ModuleRoot) -ChildPath $($Script:ModuleName + '.psm1')
 Write-Information -MessageData "Module File is $($script:ModuleFile)" -InformationAction Continue
 $Script:ModuleSettingsFile = Join-Path -Path $($Script:ModuleRoot) -ChildPath $($Script:ModuleName + '.psd1')
@@ -18,7 +21,7 @@ Describe "Public commands have Pester tests" -Tag 'Build' {
 
     foreach ($command in $commands.Name)
     {
-        $file = Get-ChildItem -Path "$Script:ModuleRoot\Tests" -Include "$command.Tests.ps1" -Recurse
+        $file = Get-ChildItem -Path "$Script:ProjectRoot\Tests" -Include "$command.Tests.ps1" -Recurse
         It "Should have a Pester test for [$command]" {
             $file.FullName | Should Not BeNullOrEmpty
         }
