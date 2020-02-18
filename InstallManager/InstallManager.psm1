@@ -1,24 +1,23 @@
 #Requires -Version 5.1
 
-$ModuleName = $MyInvocation.MyCommand.Name.Replace(".psm1", "")
-#Write-Information -MessageData "Module Name is $ModuleName" -InformationAction Continue
-$ModuleManifest = Join-Path -Path $PSScriptRoot -ChildPath $($Script:ModuleName + '.psd1')
-#Write-Information -MessageData "Module Manifest is $ModuleManifest" -InformationAction Continue
-$ModuleFunctionFiles = @(
-  'Export-IMDefinition'
-  'Get-IMChocoInstall'
-  'Get-IMPowerShellGetInstall'
-  'Get-IMSystemUninstallEntry'
-  'Get-IMDefinition'
-  'Import-IMDefinition'
-  'Import-IMConfiguration'
-  'Update-IMInstall'
-  'New-IMDefinition'
-  'Remove-IMDefinition'
-  'Set-IMDefinition'
+$ModuleFiles = @(
+  $(Join-Path -Path 'scripts' -ChildPath 'Initialize.ps1')
+  # Load Functions
+  $(Join-Path -Path 'functions' -ChildPath 'Export-IMDefinition.ps1')
+  $(Join-Path -Path 'functions' -ChildPath 'Get-IMChocoInstall.ps1')
+  $(Join-Path -Path 'functions' -ChildPath 'Get-IMPowerShellGetInstall.ps1')
+  $(Join-Path -Path 'functions' -ChildPath 'Get-IMSystemUninstallEntry.ps1')
+  $(Join-Path -Path 'functions' -ChildPath 'Get-IMDefinition.ps1')
+  $(Join-Path -Path 'functions' -ChildPath 'Import-IMDefinition.ps1')
+  $(Join-Path -Path 'functions' -ChildPath 'Import-IMConfiguration.ps1')
+  $(Join-Path -Path 'functions' -ChildPath 'Update-IMInstall.ps1')
+  $(Join-Path -Path 'functions' -ChildPath 'New-IMDefinition.ps1')
+  $(Join-Path -Path 'functions' -ChildPath 'Remove-IMDefinition.ps1')
+  $(Join-Path -Path 'functions' -ChildPath 'Set-IMDefinition.ps1')
+  # Finalize / Run any Module Functions defined above
+  $(Join-Path -Path 'scripts' -ChildPath 'RunFunctions.ps1')
 )
-
-. $PSScriptRoot\scripts\BeginImport.ps1
-. $PSScriptRoot\scripts\LoadFunctions.ps1
-. $PSScriptRoot\scripts\AtRemoval.ps1
-. $PSScriptRoot\scripts\EndImport.ps1
+foreach ($f in $ModuleFiles)
+{
+  . $f
+}
