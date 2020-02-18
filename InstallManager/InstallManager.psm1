@@ -1,6 +1,6 @@
 #Requires -Version 5.1
 
-$ModuleFiles = @(
+$Script:ModuleFiles = @(
   $(Join-Path -Path 'scripts' -ChildPath 'Initialize.ps1')
   # Load Functions
   $(Join-Path -Path 'functions' -ChildPath 'Export-IMDefinition.ps1')
