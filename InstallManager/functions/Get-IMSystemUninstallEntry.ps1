@@ -22,11 +22,11 @@
     param(
         # Use to return all available properties for each uninstall entry
         [parameter(ParameterSetName = 'Raw')]
-        [switch]$raw
+        [switch]$Raw
         ,
         # Use to override the default set of properties included with the uninstall entry output objects
         [parameter(ParameterSetName = 'SpecifiedProperties')]
-        [string[]]$property = @('DisplayName', 'DisplayVersion', 'InstallDate', 'Publisher')
+        [string[]]$Property = @('DisplayName', 'DisplayVersion', 'InstallDate', 'Publisher')
     )
     # paths: x86 and x64 registry keys are different
     if ([IntPtr]::Size -eq 4)
@@ -47,10 +47,10 @@
     #Select-Object DisplayName, Publisher, InstallDate, DisplayVersion, HelpLink, UninstallString |
     # and finally sort by name
     #Sort-Object DisplayName
-    if ($raw) { $UninstallEntries | Sort-Object -Property DisplayName }
+    if ($Raw) { $UninstallEntries | Sort-Object -Property DisplayName }
     else
     {
-        $UninstallEntries | Sort-Object -Property DisplayName | Select-Object -Property $property
+        $UninstallEntries | Sort-Object -Property DisplayName | Select-Object -Property $Property
     }
 
 }

@@ -1,0 +1,5 @@
+artifacts/README.md
+artifacts/InstallManager.psd1
+artifacts/InstallManager.psm1
+artifacts/LICENSE
+TestResults/Test-Pester.XML

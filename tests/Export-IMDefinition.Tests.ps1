@@ -16,16 +16,19 @@ Remove-Module -Name $Script:ModuleName -Force -ErrorAction SilentlyContinue
 Write-Information -MessageData "Import Module $Script:ModuleName" -InformationAction Continue
 Import-Module -Name $Script:ModuleSettingsFile -Force
 
-Describe "Public commands have Pester tests" -Tag 'Build' {
-    $commands = Get-Command -Module $Script:ModuleName
-
-    foreach ($command in $commands.Name)
-    {
-        $file = Get-ChildItem -Path "$Script:ProjectRoot\Tests" -Include "$command.Tests.ps1" -Recurse
-        It "Should have a Pester test for [$command]" {
-            $file.FullName | Should Not BeNullOrEmpty
-        }
+Describe "$CommandName Unit Tests" -Tag 'UnitTests' {
+  Context "Validate parameters" {
+    $defaultParamCount = 11
+    [object[]]$params = (Get-ChildItem "function:\$CommandName").Parameters.Keys
+    $knownParameters = @('Name', 'InstallManager', 'FilePath', 'IMDefinition')
+    $paramCount = $knownParameters.Count
+    It "Should contain specific parameters" {
+      ( (Compare-Object -ReferenceObject $knownParameters -DifferenceObject $params -IncludeEqual | Where-Object SideIndicator -eq "==").Count ) | Should Be $paramCount
     }
+    It "Should only contain $paramCount parameters" {
+      $params.Count - $defaultParamCount | Should Be $paramCount
+    }
+  }
 }
 
 Write-Information -MessageData "Removing Module $Script:ModuleName" -InformationAction Continue
