@@ -23,3 +23,8 @@ steps:
     testResultsFiles: '**/TEST-*.xml'
     searchFolder: '$(System.DefaultWorkingDirectory)/TestResults'
     failTaskOnFailedTests: true
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Pipeline.Workspace)/artifacts'
+    artifact: 'ModuleFiles'
+    publishLocation: 'pipeline'
