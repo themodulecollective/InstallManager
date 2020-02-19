@@ -9,9 +9,9 @@ Task InstallDependencies {
   {
     Install-Module -Name PSScriptAnalyzer -Scope CurrentUser -Force
   }
-  if ((Get-Module -Name ASTHelper -ListAvailable).count -lt 1)
+  if ((Get-Module -Name PSFramework -ListAvailable).count -lt 1)
   {
-    Install-Module -Name ASTHelper -Scope CurrentUser -Force
+    Install-Module -Name PSFramework -Scope CurrentUser -Force
   }
 }
 
