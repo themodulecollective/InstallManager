@@ -65,9 +65,9 @@ Task CleanArtifacts {
 Task BuildModuleFiles {
 
   $Artifacts = $(Join-Path -Path $BuildRoot -ChildPath 'artifacts')
-  #Write-Information -MessageData "Artifacts Path = $Artifacts" -InformationAction Continue
-  $ModuleName = $(Split-Path -Path $BuildRoot -Leaf)
-  #Write-Information -MessageData "ModuleName = $ModuleName" -InformationAction Continue
+  rite-Information -MessageData "Artifacts Path = $Artifacts" -InformationAction Continue
+  $ModuleName = $BuildScript.split('.')[0]
+  Write-Information -MessageData "ModuleName = $ModuleName" -InformationAction Continue
   $ModuleManifestFileName = $ModuleName + '.psd1'
   $ModuleFolder = $(Join-Path -Path $BuildRoot -ChildPath $ModuleName)
   #Write-Information -MessageData "ModuleFolder = $ModuleFolder" -InformationAction Continue
