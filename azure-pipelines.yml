@@ -11,11 +11,13 @@ pool:
 
 steps:
 - task: PowerShell@2
+  displayName: 'Run InvokeBuild Tasks'
   inputs:
     filePath: 'Build.ps1'
     pwsh: true
 
 - task: PublishTestResults@2
+  displayName: 'Publish Pester Test Results'
   inputs:
     testResultsFormat: 'NUnit'
     testResultsFiles: '**/TEST-*.xml'
