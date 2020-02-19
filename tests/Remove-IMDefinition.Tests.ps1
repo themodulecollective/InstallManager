@@ -1,7 +1,6 @@
+$Script:ModuleName = 'InstallManager'
 $CommandName = $MyInvocation.MyCommand.Name.Replace(".Tests.ps1", "")
 Write-Information -MessageData "Command is $CommandName" -InformationAction Continue
-if ($null -eq $Script:ModuleName)
-{$Script:ModuleName = $(Split-Path -path $(Split-Path $PSScriptRoot -Parent) -Leaf)}
 Write-Information -MessageData "Module Name is $Script:ModuleName" -InformationAction Continue
 $Script:ProjectRoot = $(Split-Path -Path $PSScriptRoot -Parent)
 Write-Information -MessageData "ProjectRoot is $Script:ProjectRoot" -InformationAction Continue
