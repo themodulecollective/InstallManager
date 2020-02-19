@@ -1,31 +1,50 @@
+Task . InstallDependencies, CleanTestResults, Tests, CleanArtifacts, BuildModuleFiles
+
 Task InstallDependencies {
-  if ((Get-Module -Name Pester).count -lt 1)
+  if ((Get-Module -Name Pester -ListAvailable).count -lt 1)
   {
     Install-Module -Name Pester -Scope CurrentUser -Force
   }
-  if ((Get-Module -Name PSScriptAnalyzer).count -lt 1)
+  if ((Get-Module -Name PSScriptAnalyzer -ListAvailable).count -lt 1)
   {
     Install-Module -Name PSScriptAnalyzer -Scope CurrentUser -Force
   }
-  if ((Get-Module -Name ASTHelper).count -lt 1)
+  if ((Get-Module -Name ASTHelper -ListAvailable).count -lt 1)
   {
     Install-Module -Name ASTHelper -Scope CurrentUser -Force
   }
 }
 
+Task CleanTestResults {
+  $TestResults = $(Join-Path -Path $BuildRoot -ChildPath 'TestResults')
+
+  if (Test-Path -Path $TestResults)
+  {
+    Remove-Item $TestResults -Recurse -Force
+  }
+
+  New-Item -ItemType Directory -Path $TestResults -Force
+}
+
 Task Tests {
 
   Import-Module Pester
+  $TestResults = $(Join-Path -Path $BuildRoot -ChildPath 'TestResults')
 
   $invokePesterParams = @{
-    Strict     = $true
-    PassThru   = $true
-    Verbose    = $false
-    EnableExit = $false
+    Strict       = $true
+    PassThru     = $true
+    Verbose      = $false
+    EnableExit   = $false
+    OutputFormat = 'NUnitXml'
+    OutputFile   = $(Join-Path -Path $TestResults -childPath 'Test-Pester.XML')
+    CodeCoverage = "$(Join-Path -Path $(Join-Path -Path $BuildRoot -ChildPath 'InstallManager') -ChildPath 'functions')*.ps1"
   }
 
   # Publish Test Results as NUnitXml
-  $testResults = Invoke-Pester @invokePesterParams;
+
+
+  $testResults = Invoke-Pester @invokePesterParams
 
   $numberFails = $testResults.FailedCount
   Assert($numberFails -eq 0) ('Failed "{0}" unit tests.' -f $numberFails)

@@ -1,26 +1,23 @@
 [CmdletBinding()]
 param(
-    [parameter(Position=0)]
-    $Task = 'Default'
-)
 
-$Script:Modules = @(
-
-    'InvokeBuild'
 )
 
 $Script:ModuleInstallScope = 'CurrentUser'
 
 'Starting build...'
 'Installing module dependencies...'
+if ((Get-Module -Name 'InvokeBuild').count -lt 1)
+{
+    Install-Module -Name 'InvokeBuild' -Scope $Script:ModuleInstallScope -Force -SkipPublisherCheck
+}
 
-Install-Module -Name $Script:Modules -Scope $Script:ModuleInstallScope -Force -SkipPublisherCheck
 
 $Error.Clear()
 
 "Invoking build action [$Task]"
 
-Invoke-Build -Task $Task -Result 'Result'
+Invoke-Build -Result 'Result'
 if ($Result.Error)
 {
     $Error[-1].ScriptStackTrace | Out-String
