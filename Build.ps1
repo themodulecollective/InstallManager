@@ -4,6 +4,7 @@ param(
 )
 
 $Script:ModuleInstallScope = 'CurrentUser'
+$Script:ModuleName = 'InstallManager'
 
 'Starting build...'
 'Installing module dependencies...'
