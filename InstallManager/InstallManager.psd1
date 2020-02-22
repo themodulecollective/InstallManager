@@ -30,7 +30,7 @@
     Copyright         = '2020'
 
     # Description of the functionality provided by this module
-    # Description = ''
+    Description = 'a PowerShell Module for managing the lifecycle (install/update/remove) of Chocolatey Packages, Powershell Modules, and Git Repos on a computer or set of computers.  InstallManager is meant to be for an individual user, developer, admin, or consultant that is maintaining a set of administrative, development, or productivity tools on their workstation(s).'
 
     # Minimum version of the PowerShell engine required by this module
     # PowerShellVersion = ''
@@ -108,7 +108,7 @@
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            # Tags = @()
+            Tags       = @('PSModule', 'Chocolatey', 'PowerShellGet')
 
             # A URL to the license for this module.
             LicenseUri = 'https://github.com/themodulecollective/InstallManager/blob/master/LICENSE'
