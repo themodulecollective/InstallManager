@@ -27,5 +27,5 @@ steps:
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Pipeline.Workspace)/s/artifacts'
-    artifact: 'ModuleFiles'
+    artifact: 'InstallManager'
     publishLocation: 'pipeline'
