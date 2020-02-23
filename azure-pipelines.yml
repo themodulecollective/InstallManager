@@ -4,7 +4,12 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+ branches:
+  include:
+      - master
+ paths:
+  include:
+      - InstallManager/InstallManager.psd1
 
 pool:
   vmImage: 'windows-2019'
