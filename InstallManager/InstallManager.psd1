@@ -9,31 +9,31 @@
 @{
 
     # Script module or binary module file associated with this manifest.
-    RootModule        = '.\InstallManager.psm1'
+    RootModule           = '.\InstallManager.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.0.0.5'
+    ModuleVersion        = '0.0.0.6'
 
     # Supported PSEditions
-    # CompatiblePSEditions = @()
+    CompatiblePSEditions = @('Desktop', 'Core')
 
     # ID used to uniquely identify this module
-    GUID              = 'ea31791a-234e-473c-bb28-9fe083587881'
+    GUID                 = 'ea31791a-234e-473c-bb28-9fe083587881'
 
     # Author of this module
-    Author            = 'Mike Campbell'
+    Author               = 'Mike Campbell'
 
     # Company or vendor of this module
-    CompanyName       = 'themodulecollective'
+    CompanyName          = 'themodulecollective'
 
     # Copyright statement for this module
-    Copyright         = '2020'
+    Copyright            = '2020'
 
     # Description of the functionality provided by this module
-    Description = 'a PowerShell Module for managing the lifecycle (install/update/remove) of Chocolatey Packages, Powershell Modules, and Git Repos on a computer or set of computers.  InstallManager is meant to be for an individual user, developer, admin, or consultant that is maintaining a set of administrative, development, or productivity tools on their workstation(s).'
+    Description          = 'a PowerShell Module for managing the lifecycle (install/update/remove) of Chocolatey Packages, Powershell Modules, and Git Repos on a computer or set of computers.  InstallManager is meant to be for an individual user, developer, admin, or consultant that is maintaining a set of administrative, development, or productivity tools on their workstation(s).'
 
     # Minimum version of the PowerShell engine required by this module
-    # PowerShellVersion = ''
+    PowerShellVersion    = '5.1'
 
     # Name of the PowerShell host required by this module
     # PowerShellHostName = ''
@@ -51,7 +51,7 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    RequiredModules   = @(
+    RequiredModules      = @(
         @{ModuleName = 'PSFramework'; ModuleVersion = '1.1.59' }
     )
 
@@ -71,7 +71,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @(
+    FunctionsToExport    = @(
         'Export-IMDefinition'
         'Get-IMChocoInstall'
         'Get-IMPowerShellGetInstall'
@@ -103,7 +103,7 @@
     # FileList = @()
 
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
-    PrivateData       = @{
+    PrivateData          = @{
 
         PSData = @{
 

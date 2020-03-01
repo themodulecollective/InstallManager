@@ -87,5 +87,5 @@ Task BuildModuleFiles {
   Copy-Item -Destination $Artifacts -Path $ModuleManifest
   Copy-Item -Destination $Artifacts -Path $(Join-Path -path $BuildRoot -ChildPath 'LICENSE')
   Copy-Item -Destination $Artifacts -Path $(Join-Path -path $BuildRoot -ChildPath 'README.md')
-
+  Copy-Item -Destination $Artifacts -Path $(Join-Path -path $BuildRoot -ChildPath 'ReleaseNotes.md')
 }

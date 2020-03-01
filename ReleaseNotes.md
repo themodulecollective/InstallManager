@@ -1,0 +1,11 @@
+# InstallManager Release Notes
+
+## InstallManager
+
+a PowerShell Module for managing the lifecycle (install/update/remove) of Chocolatey Packages, Powershell Modules, and Git Repos on a computer or set of computers.  InstallManager is meant to be for an individual user, developer, admin, or consultant that is maintaining a set of administrative, development, or productivity tools on their workstation(s).
+
+## InstallManager 0.0.0.6
+
+### What's New
+
+This is a minor release to better indicate compatability with Windows PowerShell 5.1 and PowerShell core on Windows. The only change is to add this file and to update the module metadata (psd1 file).  The current version is NOT compatible with Powerlinux due to use of Windows Registry (via PSFramework) for IMDefinitions.  In a future version, the plan is to make this configurable within the module settings and default to a different method for storing of settings and IMDefinitions on linux, but for now, this module is for Windows only.
