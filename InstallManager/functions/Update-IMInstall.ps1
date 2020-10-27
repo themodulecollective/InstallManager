@@ -54,7 +54,7 @@ function Update-IMInstall
         {
             $InstallManager = $imd.InstallManager
             $Name = $imd.Name
-            $RequiredVersion = $imd.RequiredVersion
+            $RequiredVersion = @($imd.RequiredVersion)
             $AutoUpgrade = $imd.AutoUpgrade
             $AutoRemove = $imd.AutoRemove
             $ExemptMachine = $imd.ExemptMachine
