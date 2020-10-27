@@ -3,7 +3,7 @@ Task . InstallDependencies, CleanTestResults, Tests, CleanArtifacts, BuildModule
 Task InstallDependencies {
   if ((Get-Module -Name Pester -ListAvailable).count -lt 1)
   {
-    Install-Module -Name Pester -Scope CurrentUser -Force
+    Install-Module -Name Pester -Scope CurrentUser -Force -MaximumVersion 4.10.99
   }
   if ((Get-Module -Name PSScriptAnalyzer -ListAvailable).count -lt 1)
   {
