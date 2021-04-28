@@ -19,11 +19,11 @@ Import-Module -Name $Script:ModuleSettingsFile -Force
 Describe "$CommandName Unit Tests" -Tag 'UnitTests' {
   Context "Validate parameters" {
     $defaultParamCount = 11
-    [object[]]$params = (Get-ChildItem "function:\$CommandName").Parameters.Keys
+    [object[]]$params = @((Get-ChildItem "function:\$CommandName").Parameters.Keys)
     $knownParameters = @('Name')
     $paramCount = $knownParameters.Count
     It "Should contain specific parameters" {
-      ( (Compare-Object -ReferenceObject $knownParameters -DifferenceObject $params -IncludeEqual | Where-Object SideIndicator -eq "==").Count ) | Should Be $paramCount
+      ( @(Compare-Object -ReferenceObject $knownParameters -DifferenceObject $params -IncludeEqual | Where-Object SideIndicator -eq "==").Count ) | Should Be $paramCount
     }
     It "Should only contain $paramCount parameters" {
       $params.Count - $defaultParamCount | Should Be $paramCount
