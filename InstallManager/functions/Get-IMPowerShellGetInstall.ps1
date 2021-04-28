@@ -127,17 +127,17 @@
             'All'
             {
                 #Get the locally available modules on this system for the current user based on entries in $env:Psmodulepath
-                @(Get-Module -ListAvailable).foreach( { $LocalModules.add($_) | Out-Null })
+                $null = @(Get-Module -ListAvailable).foreach( { $LocalModules.add($_) })
                 #Get the locally available modules that were installed using PowerShellGet Module commands
-                $LocalModules.where( { $null -ne $_.RepositorySourceLocation }).foreach( { Get-InstalledModule -Name $_.Name -RequiredVersion $_.Version @GetInstalledModuleParams }).foreach( { $LocalPowerShellGetModules.add($_) | Out-Null })
-                ($LocalModules.ForEach( { $_.Name }) | Sort-Object -Unique).foreach( { $NamedModules.add([pscustomobject]@{Name = $_ }) | Out-Null })
+                $null = $LocalModules.where( { $null -ne $_.RepositorySourceLocation }).foreach( { Get-InstalledModule -Name $_.Name -RequiredVersion $_.Version @GetInstalledModuleParams }).foreach( { $LocalPowerShellGetModules.add($_) })
+                $null = ($LocalModules.ForEach( { $_.Name }) | Sort-Object -Unique).foreach( { $NamedModules.add([pscustomobject]@{Name = $_ }) })
                 $LocalPowerShellGetModules.ForEach( {
                         if (-not $RepoFoundModules.Contains($_.name))
                         {
                             $FindModuleParams.Name = $_.name
                             $RepositoryModule = Find-Module @FindModuleParams
-                            $LatestRepositoryModules.add($RepositoryModule) | Out-Null
-                            $RepoFoundModules.add($_.name) | Out-Null
+                            $null = $LatestRepositoryModules.add($RepositoryModule)
+                            $null = $RepoFoundModules.add($_.name)
                         }
                     })
             }
@@ -146,16 +146,16 @@
                 foreach ($n in $Name)
                 {
                     #Get the locally available named module(s) on this system for the current user based on entries in $env:Psmodulepath
-                    $LocalModules.add($(Get-Module -ListAvailable -Name $n -ErrorAction Stop)) | Out-Null
+                    $null = $LocalModules.add($(Get-Module -ListAvailable -Name $n -ErrorAction Stop))
                     #Get the locally available named module(s) that were installed using PowerShellGet Module commands
                     $GetInstalledModuleParams.Name = $n
                     $GetInstalledModuleParams.AllVersions = $true
-                    $LocalPowerShellGetModules.add($(Get-InstalledModule @GetInstalledModuleParams)) | Out-Null
+                    $null = $LocalPowerShellGetModules.add($(Get-InstalledModule @GetInstalledModuleParams))
                     #Get the PSGallery Module for the named module
                     $FindModuleParams.Name = $n
                     $LatestRepositoryModule = Find-Module @FindModuleParams
-                    $LatestRepositoryModules.add($LatestRepositoryModule) | Out-Null
-                    $NamedModules.add($([pscustomobject]@{Name = $n })) | Out-Null
+                    $null = $LatestRepositoryModules.add($LatestRepositoryModule)
+                    $null = $NamedModules.add($([pscustomobject]@{Name = $n }))
                 }
             }
         }
