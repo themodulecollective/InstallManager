@@ -12,7 +12,7 @@
     RootModule           = '.\InstallManager.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '0.0.0.8'
+    ModuleVersion        = '0.0.0.9'
 
     # Supported PSEditions
     CompatiblePSEditions = @('Desktop', 'Core')
@@ -27,7 +27,7 @@
     CompanyName          = 'themodulecollective'
 
     # Copyright statement for this module
-    Copyright            = '2020'
+    Copyright            = '2021'
 
     # Description of the functionality provided by this module
     Description          = 'a PowerShell Module for managing the lifecycle (install/update/remove) of Chocolatey Packages, Powershell Modules, and Git Repos on a computer or set of computers.  InstallManager is meant to be for an individual user, developer, admin, or consultant that is maintaining a set of administrative, development, or productivity tools on their workstation(s).'
