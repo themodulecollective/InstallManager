@@ -32,7 +32,7 @@ function Set-IMDefinition
     [ValidateScript( { $_.psobject.TypeNames[0] -like '*IMDefinition' })]
     [psobject]$IMDefinition
     ,
-    # Use to Specify one or more required versions for PowerShell Modules or a single version to pin for choco packages
+    # Use to Specify one or more required versions for PowerShell Modules or a single version to pin for WinGet or chocolatey packages
     [parameter(Position = 3)]
     [string[]]$RequiredVersion
     ,
@@ -44,7 +44,7 @@ function Set-IMDefinition
     [parameter(Position = 5)]
     [bool]$AutoRemove
     ,
-    # Use to specify a hashtable of additional parameters required by the Install Manager (PowerShellGet or Chocolatey) when processing this definition. Do NOT Include the leading '-' or '--' when specifying parameter names.
+    # Use to specify a hashtable of additional parameters required by the Install Manager (PowerShellGet, WinGet, or Chocolatey) when processing this definition. Do NOT Include the leading '-' or '--' when specifying parameter names.
     [parameter(Position = 6)]
     [hashtable]$Parameter
     ,
@@ -102,7 +102,7 @@ function Set-IMDefinition
         {
           $true
           {
-              $imd.$k = $PSBoundParameters.$k
+            $imd.$k = $PSBoundParameters.$k
           }
           $false
           { }

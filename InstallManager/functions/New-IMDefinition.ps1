@@ -22,12 +22,12 @@ function New-IMDefinition
     [String]
     $Name
     ,
-    # Specify the name of the Install Manager to use for the Module (PowerShellGet) or Package (Chocolatey)
+    # Specify the name of the Install Manager to use for the Module (PowerShellGet) or Package (WinGet or Chocolatey)
     [Parameter(Mandatory, Position = 2)]
     [InstallManager]
     $InstallManager
     ,
-    # Use to Specify one or more required versions for PowerShell Modules or a single version to pin for choco packages
+    # Use to Specify one or more required versions for PowerShell Modules or a single version to pin for Chocolatey or WinGet packages
     [parameter(Position = 3)]
     [string[]]$RequiredVersion
     ,
@@ -39,7 +39,7 @@ function New-IMDefinition
     [parameter(Position = 5)]
     [bool]$AutoRemove = $true
     ,
-    # Use to specify a hashtable of additional parameters required by the Install Manager (PowerShellGet or Chocolatey) when processing this definition. Do NOT Include the leading '-' or '--' when specifying parameter names. For Chocolatey options that require no value, use $null.  For PowerShellGet params such as bool or switch, use $true or $false as the value.
+    # Use to specify a hashtable of additional parameters required by the Install Manager (PowerShellGet, WinGet, or Chocolatey) when processing this definition. Do NOT Include the leading '-' or '--' when specifying parameter names. For Chocolatey options that require no value, use $null.  For PowerShellGet params such as bool or switch, use $true or $false as the value.
     [parameter(Position = 6)]
     [hashtable]$Parameter
     ,
@@ -76,6 +76,7 @@ function New-IMDefinition
           switch ($InstallManager)
           {
             #'Chocolatey' { '' }
+            #'WinGet' {''}
             'PowerShellGet' { 'PSGallery' }
             Default { '' }
           }

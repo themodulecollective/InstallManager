@@ -89,7 +89,7 @@ function Update-IMInstall
                             {
                                 if ($false -eq $installedModuleInfo.IsLatestVersion -or $null -eq $installedModuleInfo.IsLatestVersion)
                                 {
-                                    if ($PSCmdlet.ShouldProcess("Install-Module " + $($installModuleParams.GetEnumerator().foreach( { '-' + $_.Name + ' ' + $_.Value }) -join ' ')))
+                                    if ($PSCmdlet.ShouldProcess('Install-Module ' + $($installModuleParams.GetEnumerator().foreach( { '-' + $_.Name + ' ' + $_.Value }) -join ' ')))
                                     {
                                         Install-Module @installModuleParams
                                     }
@@ -108,7 +108,7 @@ function Update-IMInstall
                                 if ($rv -notin $installedModuleInfo.AllInstalledVersions)
                                 {
                                     $installModuleParams.RequiredVersion = $rv
-                                    if ($PSCmdlet.ShouldProcess("Install-Module " + $($installModuleParams.GetEnumerator().foreach( { '-' + $_.Name + ' ' + $_.Value }) -join ' ')))
+                                    if ($PSCmdlet.ShouldProcess('Install-Module ' + $($installModuleParams.GetEnumerator().foreach( { '-' + $_.Name + ' ' + $_.Value }) -join ' ')))
                                     {
                                         Install-Module @installModuleParams
                                     }
@@ -135,7 +135,7 @@ function Update-IMInstall
                             foreach ($rV in $removeVersions)
                             {
                                 $UninstallModuleParams.RequiredVersion = $rV
-                                if ($PSCmdlet.ShouldProcess("Uninstall-Module " + $($uninstallModuleParams.GetEnumerator().foreach( { '-' + $_.Name + ' ' + $_.Value }) -join ' ')))
+                                if ($PSCmdlet.ShouldProcess('Uninstall-Module ' + $($uninstallModuleParams.GetEnumerator().foreach( { '-' + $_.Name + ' ' + $_.Value }) -join ' ')))
                                 {
                                     Uninstall-Module @UninstallModuleParams
                                 }
@@ -185,6 +185,67 @@ function Update-IMInstall
                                     }
                                 }
                                 #notification/logging that a new version is available
+                            }
+                        }
+                    }
+                    'WinGet'
+                    {
+                        $installedModuleInfo = Get-IMWinGetInstall -Name $Name
+                        $options = ''
+                        if ($Parameter.count -ge 1)
+                        {
+                            foreach ($key in $Parameter.keys)
+                            {
+                                $options += "--$key"
+                                if (-not [string]::IsNullOrWhiteSpace($Parameter.$key))
+                                {
+                                    $options += "=`"'$Parameter.$key'`" "
+                                }
+                                else
+                                {
+                                    $options += ' '
+                                }
+                            }
+                        }
+
+                        switch ($null -eq $installedModuleInfo.Version)
+                        {
+                            $true
+                            {
+                                Write-Information -MessageData "Running Command: 'winget install $Name --exact --silent $options'"
+                                if ($PSCmdlet.ShouldProcess("winget install $Name --exact --silent $options"))
+                                {
+                                    Invoke-Command -ScriptBlock $([scriptblock]::Create("winget install $Name --exact --silent $options"))
+                                }
+                            }
+                            $false
+                            {
+                                switch ($true -eq $AutoUpgrade)
+                                {
+                                    $true
+                                    {
+                                        if ($false -eq $installedModuleInfo.IsLatestVersion -or $null -eq $installedModuleInfo.IsLatestVersion)
+                                        {
+                                            Write-Information -MessageData "Running Command: 'winget upgrade $Name --exact --silent $options'"
+                                            if ($PSCmdlet.ShouldProcess("winget upgrade $Name --exact --silent $options"))
+                                            {
+                                                Invoke-Command -ScriptBlock $([scriptblock]::Create("winget upgrade $Name --exact --silent $options"))
+                                            }
+                                        }
+                                    }
+                                    $false
+                                    {
+                                        if ($null -eq $installedModuleInfo)
+                                        {
+                                            Write-Information -MessageData "Running Command: 'winget upgrade $Name --exact --silent $options'"
+                                            if ($PSCmdlet.ShouldProcess("winget upgrade $Name --exact --silent $options"))
+                                            {
+                                                Invoke-Command -ScriptBlock $([scriptblock]::Create("winget upgrade $Name --exact --silent $options"))
+                                            }
+                                        }
+                                        #notification/logging that a new version is available
+                                    }
+                                }
                             }
                         }
                     }

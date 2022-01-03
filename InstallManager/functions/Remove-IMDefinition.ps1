@@ -22,7 +22,7 @@ function Remove-IMDefinition
     [String]
     $Name
     ,
-    # Specify the name of the Install Manager to use for the Module (PowerShellGet) or Package (Chocolatey)
+    # Specify the name of the Install Manager to use for the Module (PowerShellGet) or Package (WinGet or Chocolatey)
     [Parameter(Position = 2, ParameterSetName = 'Name')]
     [InstallManager]
     $InstallManager
