@@ -84,9 +84,9 @@
 
     Gets an object with information about each installed version the PSCloudFlare module, a module that has multiple versions installed and also has a version from a local git repository.
 .INPUTS
-    Inputs (if any)
+    Inputs [string]
 .OUTPUTS
-    Output (if any)
+    Output [PSCustomObject]
 .NOTES
     General notes
 #>
@@ -254,7 +254,7 @@
                 $PerModuleGroups = $PerInstalledVersionOutput | Group-Object -Property Name
                 foreach ($pmg in $PerModuleGroups)
                 {
-                    $lvInstalled = $pmg.Group.Version.foreach( { $_.tostring() }) | Sort-Object -Descending | Select-Object -first 1
+                    $lvInstalled = $pmg.Group.Version.foreach( { $_.tostring() }) | Sort-Object -Descending | Select-Object -First 1
                     switch ($null -eq $lvInstalled)
                     {
                         $false

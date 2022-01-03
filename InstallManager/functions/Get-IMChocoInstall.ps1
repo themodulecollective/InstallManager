@@ -22,9 +22,9 @@ Function Get-IMChocoInstall
         Returns an object with information for each choco installed package, if any, along with information about the latest version available in the repository.  Does not return any information for not installed packages.
 
     .INPUTS
-        Inputs (if any)
+        Inputs [string]
     .OUTPUTS
-        Output (if any)
+        Output [PSCustomObject]
     .NOTES
         General notes
     #>
@@ -49,7 +49,7 @@ Function Get-IMChocoInstall
                 foreach ($n in $Name)
                 {
                     $ip = $(
-                        Invoke-Command -scriptblock $([scriptblock]::Create("choco list $n --LocalOnly --LimitOutput --Exact")) | ForEach-Object {
+                        Invoke-Command -ScriptBlock $([scriptblock]::Create("choco list $n --LocalOnly --LimitOutput --Exact")) | ForEach-Object {
                             $packageName, $installedVersion = $_.split('|')
                             [PSCustomObject]@{
                                 Name             = "$packageName"
@@ -58,7 +58,7 @@ Function Get-IMChocoInstall
                         }
                     )
                     $ap = $(
-                        Invoke-Command -scriptblock $([scriptblock]::Create("choco list $n --LimitOutput --Exact")) | ForEach-Object {
+                        Invoke-Command -ScriptBlock $([scriptblock]::Create("choco list $n --LimitOutput --Exact")) | ForEach-Object {
                             $packageName, $availableVersion = $_.split('|')
                             [PSCustomObject]@{
                                 Name             = "$packageName"
@@ -88,7 +88,7 @@ Function Get-IMChocoInstall
             'All'
             {
                 $ChocoInstalledPackages = @(
-                    Invoke-Command -scriptblock $([scriptblock]::Create("choco list --LocalOnly --LimitOutput")) | ForEach-Object {
+                    Invoke-Command -ScriptBlock $([scriptblock]::Create('choco list --LocalOnly --LimitOutput')) | ForEach-Object {
                         $packageName, $installedVersion = $_.split('|')
                         [PSCustomObject]@{
                             Name             = "$packageName"
@@ -97,7 +97,7 @@ Function Get-IMChocoInstall
                     }
                 )
                 $ChocoOutdatedPackages = @(
-                    Invoke-Command -scriptblock $([scriptblock]::Create("choco outdated --LimitOutput")) | ForEach-Object {
+                    Invoke-Command -ScriptBlock $([scriptblock]::Create('choco outdated --LimitOutput')) | ForEach-Object {
                         $packageName, $installedVersion, $latestRepositoryVersion, $pinned = $_.split('|')
                         [PSCustomObject]@{
                             Name                    = "$packageName"

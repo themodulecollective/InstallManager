@@ -22,9 +22,9 @@ Function Get-IMWinGetInstall
         Returns an object with information for each WinGet installed package, if any, along with information about the latest version available in the repository.  Does not return any information for not installed packages.
 
     .INPUTS
-        Inputs (if any)
+        Inputs [String]
     .OUTPUTS
-        Output (if any)
+        Output [PSCustomObject]
     .NOTES
         General notes
     #>
@@ -118,7 +118,6 @@ Function Get-IMWinGetInstall
             'All'
             {
                 $rawLines = @(Invoke-Command -ScriptBlock $([scriptblock]::Create('winget list')) | Out-String -Stream | Select-String -Pattern 'Version\s+Source|\s+winget')
-                $rawLines
                 $header = $rawLines[0].tostring()
                 $rows = @($rawLines[1..$($rawLines.Count -1)].foreach({$_.tostring()}))
                 $IdStart = $header.IndexOf('Id')
