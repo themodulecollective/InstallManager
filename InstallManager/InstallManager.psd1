@@ -27,7 +27,7 @@
     CompanyName          = 'themodulecollective'
 
     # Copyright statement for this module
-    Copyright            = '2021'
+    Copyright            = '2022'
 
     # Description of the functionality provided by this module
     Description          = 'a PowerShell Module for managing the lifecycle (install/update/remove) of WinGetPackages, Chocolatey Packages, Powershell Modules, and Git Repos on a computer or set of computers.  InstallManager is meant to be for an individual user, developer, admin, or consultant that is maintaining a set of administrative, development, or productivity tools on their workstation(s).'
